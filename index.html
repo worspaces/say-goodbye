@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click to Enter</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        #message {
+            font-size: 30px;
+            text-align: center;
+            position: absolute;
+            z-index: 2;
+        }
+        #gif {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            pointer-events: none; /* Prevents image interaction */
+        }
+        #clickableArea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div id="message">Click to enter!</div>
+    <img id="gif" src="https://i.imgflip.com/5bq4et.jpg" alt="Gif" draggable="false">
+    <audio id="audio" src="https://github.com/worspaces/at-the-top-of-it/raw/refs/heads/main/You%20know%20the%20rules.mp3" preload="auto"></audio>
+
+    <div id="clickableArea"></div>
+
+    <script>
+        // Function to request fullscreen mode
+        function enterFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+                document.documentElement.msRequestFullscreen();
+            }
+        }
+
+        // Add click listener to the transparent box
+        document.getElementById('clickableArea').addEventListener('click', function() {
+            // Hide the message
+            document.getElementById('message').style.display = 'none';
+            
+            // Show the gif
+            var gif = document.getElementById('gif');
+            gif.style.display = 'block';
+            
+            // Play the new sound
+            var audio = document.getElementById('audio');
+            audio.play();
+            
+            // Remove the clickable area
+            var clickableArea = document.getElementById('clickableArea');
+            clickableArea.parentNode.removeChild(clickableArea); 
+
+            // Enter fullscreen
+            enterFullscreen();
+        });
+
+        // Close the tab when the audio ends
+        document.getElementById('audio').addEventListener('ended', function() {
+            window.close(); // Close the tab after audio finishes
+        });
+
+        // Listen for fullscreen changes and re-enter fullscreen if needed
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                enterFullscreen();
+            }
+        });
+
+        document.addEventListener('webkitfullscreenchange', function() {
+            if (!document.webkitFullscreenElement) {
+                enterFullscreen();
+            }
+        });
+
+        document.addEventListener('mozfullscreenchange', function() {
+            if (!document.mozFullScreenElement) {
+                enterFullscreen();
+            }
+        });
+
+        document.addEventListener('msfullscreenchange', function() {
+            if (!document.msFullscreenElement) {
+                enterFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
