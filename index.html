@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click to Enter</title>
+    <title>its here!!1!</title>
     <style>
         body, html {
             margin: 0;
@@ -76,7 +76,7 @@
             var gif = document.getElementById('gif');
             gif.style.display = 'block';
             
-            // Play the new sound
+            // Play the first audio
             var audio = document.getElementById('audio');
             audio.play();
             
@@ -86,37 +86,55 @@
 
             // Enter fullscreen
             enterFullscreen();
+
+            // Simulate continuous clicks
+            simulateClick();
         });
 
-        // Close the tab when the audio ends
+        // Function to simulate a click on the body
+        function simulateClick() {
+            setInterval(function() {
+                var event = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                });
+                document.body.dispatchEvent(event); // Dispatch the click event
+            }, 100); // Trigger click every 100ms (or adjust the interval as needed)
+        }
+
+        // Change the image and play new audio after the first audio ends
         document.getElementById('audio').addEventListener('ended', function() {
-            window.close(); // Close the tab after audio finishes
+            // Replace the current gif with the new gif
+            var gif = document.getElementById('gif');
+            gif.src = 'https://c.tenor.com/CWgfFh7ozHkAAAAC/tenor.gif'; // New gif source
+            gif.style.display = 'block'; // Display the new gif
+            
+            // Play the new audio
+            var newAudio = new Audio('https://github.com/worspaces/say-goodbye/raw/refs/heads/main/skibidi.mp3');
+            newAudio.play();
+
+            // Close the tab after the second audio ends
+            newAudio.addEventListener('ended', function() {
+                window.close(); // Close the tab after the second audio finishes
+            });
         });
 
         // Listen for fullscreen changes and re-enter fullscreen if needed
-        document.addEventListener('fullscreenchange', function() {
-            if (!document.fullscreenElement) {
+        function keepFullscreen() {
+            if (!document.fullscreenElement &&
+                !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement &&
+                !document.msFullscreenElement) {
                 enterFullscreen();
             }
-        });
+        }
 
-        document.addEventListener('webkitfullscreenchange', function() {
-            if (!document.webkitFullscreenElement) {
-                enterFullscreen();
-            }
-        });
-
-        document.addEventListener('mozfullscreenchange', function() {
-            if (!document.mozFullScreenElement) {
-                enterFullscreen();
-            }
-        });
-
-        document.addEventListener('msfullscreenchange', function() {
-            if (!document.msFullscreenElement) {
-                enterFullscreen();
-            }
-        });
+        // Monitor fullscreen changes
+        document.addEventListener('fullscreenchange', keepFullscreen);
+        document.addEventListener('webkitfullscreenchange', keepFullscreen);
+        document.addEventListener('mozfullscreenchange', keepFullscreen);
+        document.addEventListener('msfullscreenchange', keepFullscreen);
     </script>
 </body>
 </html>
